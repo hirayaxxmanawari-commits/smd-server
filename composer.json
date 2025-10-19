@@ -1,0 +1,17 @@
+{
+    "name": "php-ws/websocket-server",
+    "description": "A WebSocket server built with PHP Ratchet",
+    "type": "project",
+    "require": {
+        "php": ">=7.4",
+        "cboden/ratchet": "^0.4.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "scripts": {
+        "start": "php server.php"
+    }
+} 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ratchet WebSocket Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    #log { border: 1px solid #ccc; padding: 10px; height: 200px; overflow-y: auto; background: #f9f9f9; }
+    input, button { padding: 8px; margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h2>Ratchet WebSocket Test</h2>
+
+  <div>
+    <label>Server IP: </label>
+    <input type="text" id="serverIp" value="192.168.1.10">
+    <button onclick="connectWS()">Connect</button>
+  </div>
+
+  <div>
+    <input type="text" id="message" placeholder="Type a message...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <h3>Logs</h3>
+  <div id="log"></div>
+
+  <script>
+    let ws;
+
+    function log(msg) {
+      const logDiv = document.getElementById("log");
+      logDiv.innerHTML += msg + "<br>";
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    function connectWS() {
+      const ip = document.getElementById("serverIp").value;
+      ws = new WebSocket(`ws://${ip}:8080`);
+
+      ws.onopen = () => log("✅ Connected to server");
+      ws.onmessage = (e) => log("📩 Server: " + e.data);
+      ws.onclose = () => log("❌ Connection closed");
+      ws.onerror = (err) => log("⚠️ Error: " + err);
+    }
+
+    function sendMessage() {
+      const msg = document.getElementById("message").value;
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(msg);
+        log("➡️ You: " + msg);
+        document.getElementById("message").value = "";
+      } else {
+        log("⚠️ Not connected");
+      }
+    }
+  </script>
+</body>
+</html>
